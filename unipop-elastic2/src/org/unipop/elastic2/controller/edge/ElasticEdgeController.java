@@ -33,6 +33,7 @@ public class ElasticEdgeController implements org.unipop.controller.EdgeControll
     private final String indexName;
     private final int scrollSize;
     private TimingAccessor timing;
+//    protected int maxWindowSize;
 
     public ElasticEdgeController(UniGraph graph, Client client, ElasticMutations elasticMutations, String indexName,
                                  int scrollSize, TimingAccessor timing) {
@@ -42,6 +43,7 @@ public class ElasticEdgeController implements org.unipop.controller.EdgeControll
         this.indexName = indexName;
         this.scrollSize = scrollSize;
         this.timing = timing;
+//        this.maxWindowSize = maxWindowSize;
     }
 
     @Override
@@ -50,8 +52,8 @@ public class ElasticEdgeController implements org.unipop.controller.EdgeControll
         BoolQueryBuilder boolQuery = ElasticHelper.createQueryBuilder(predicates.hasContainers);
         boolQuery.must(QueryBuilders.existsQuery(ElasticEdge.InId));
 
-        return new QueryIterator<>(boolQuery, scrollSize, predicates.limitHigh, client, this::createEdge, timing, indexName);
-//        return new QueryIterator<>(boolQuery, scrollSize, 10000, client, this::createEdge, timing, indexName);
+//        return new QueryIterator<>(boolQuery, scrollSize, predicates.limitHigh, client, this::createEdge, timing, indexName);
+        return new QueryIterator<>(boolQuery, scrollSize, client, this::createEdge, timing, indexName);
     }
 
     @Override
@@ -67,8 +69,8 @@ public class ElasticEdgeController implements org.unipop.controller.EdgeControll
         BoolQueryBuilder boolQuery = ElasticHelper.createQueryBuilder(predicates.hasContainers);
         addQuerysByDirection(direction, vertexIds, boolQuery);
 
-        return new QueryIterator<>(boolQuery, scrollSize, predicates.limitHigh, client, this::createEdge, timing, indexName);
-//        return new QueryIterator<>(boolQuery, scrollSize, 10000, client, this::createEdge, timing, indexName);
+//        return new QueryIterator<>(boolQuery, scrollSize, predicates.limitHigh, client, this::createEdge, timing, indexName);
+        return new QueryIterator<>(boolQuery, scrollSize, client, this::createEdge, timing, indexName);
     }
 
     @Override

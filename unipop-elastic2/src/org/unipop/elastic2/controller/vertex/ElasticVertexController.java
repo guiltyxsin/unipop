@@ -32,6 +32,7 @@ public class ElasticVertexController implements VertexController {
     protected TimingAccessor timing;
     private String defaultIndex;
     private Map<Direction, LazyGetter> lazyGetters;
+    protected int maxWindowSize;
 
     public ElasticVertexController(UniGraph graph, Client client, ElasticMutations elasticMutations, String defaultIndex,
                                    int scrollSize, TimingAccessor timing) {
@@ -42,6 +43,7 @@ public class ElasticVertexController implements VertexController {
         this.scrollSize = scrollSize;
         this.timing = timing;
         this.lazyGetters = new HashMap<>();
+//        this.maxWindowSize = maxWindowSize;
     }
 
     @Override
@@ -60,8 +62,8 @@ public class ElasticVertexController implements VertexController {
         elasticMutations.refresh(defaultIndex);
         BoolQueryBuilder boolQuery = ElasticHelper.createQueryBuilder(predicates.hasContainers);
         boolQuery.must(QueryBuilders.missingQuery(ElasticEdge.InId));
-        return new QueryIterator<>(boolQuery, scrollSize, predicates.limitHigh, client, this::createVertex, timing, getDefaultIndex());
-//        return new QueryIterator<>(boolQuery, scrollSize, 10000, client, this::createVertex, timing, getDefaultIndex());
+//        return new QueryIterator<>(boolQuery, scrollSize, predicates.limitHigh, client, this::createVertex, timing, getDefaultIndex());
+        return new QueryIterator<>(boolQuery, scrollSize, client, this::createVertex, timing, getDefaultIndex());
     }
 
     @Override

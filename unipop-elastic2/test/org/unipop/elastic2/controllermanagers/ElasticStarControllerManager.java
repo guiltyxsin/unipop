@@ -44,7 +44,7 @@ public class ElasticStarControllerManager extends BasicControllerManager {
 
         timing = new TimingAccessor();
         elasticMutations = new ElasticMutations(false, client, timing);
-        controller = new ElasticStarController(graph, client, elasticMutations ,indexName, 0, timing);
+        controller = new ElasticStarController(graph, client, elasticMutations ,indexName, configuration.getInt("index.max_result_window", 10000), timing);
     }
 
     @Override
